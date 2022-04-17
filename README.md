@@ -3,4 +3,4 @@ Desafio 6 proposto pela comunidade do discord Codelândia para prática de HTML,
 
 Projeto básico, utilizando HTML, CSS e JS.
 
-![Imagens do projeto](./images/fundo.jpg)
+![Imagens do projeto](./images/preview-full-desktop.png)
