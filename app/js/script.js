@@ -2,58 +2,87 @@
 //      ADICIONAR SLIDE CARROSSEL NA PÁGINA
 //      PEGAR OS DADOS DE FORMA DINÂMICA NO JS
 //      REFATORAR CÓDIGO JS
+//      BOTÕES DO CARROSSEL DEVEM FICAR PARADOS AO TROCAR DE FILMES
+//      AO MUDAR DE FILMES E A DESCRIÇÃO DO MESMO FOR GRANDE DEVE TER UM ESPAÇAMENTO ENTRE ELA E OS BOTÕES DE ASSISTIR AGORA E TRAILER
+//      LÓGICA PARA VOTOS DE POPULARIDADE DO FILME ALTERNANDO ESTRELAS NA TELA
+
 import * as key from "../config/key.js";
 
 const URL_API = `https://api.themoviedb.org/3/movie/popular?api_key=${key.API_KEY}&page=1&language=pt-BR`;
 const URL_PATH_IMAGE = "https://image.tmdb.org/t/p/original/";
 
-function getFilmes() {
+const body = document.querySelector("body");
+const capa = document.querySelector("#capa-filme");
+const duracao = document.querySelector("#main__data-lancamento");
+const titulo = document.querySelector("#header__titulo");
+const descricao = document.querySelector(".main__descricao p");
+const setaEsquerda = document.querySelector("#seta-carrossel-esquerda");
+const setaDireita = document.querySelector("#seta-carrossel-direita");
+
+let arrayFilmes;
+var variadorDeFilme = 0;
+
+const getFilmes = () => {
   axios
     .get(URL_API)
     .then((response) => {
-      var data = response.data.results;
-
-      var posterPath = data[0].backdrop_path;
-      mudaBackground(`${URL_PATH_IMAGE}${posterPath}`);
-
-      let capaPath = data[0].poster_path;
-      mudaCapaFilme(`${URL_PATH_IMAGE}${capaPath}`);
-
-      let dataLancamento = data[0].release_date;
-      mudaDuracao(dataLancamento);
-
-      let titulo = data[0].title;
-      mudaTitulo(titulo);
-
-      let descricao = data[0].overview;
-      mudaDescricao(descricao);
+      arrayFilmes = response.data.results;
     })
     .catch((error) => console.log(error));
-}
+};
 
-function mudaBackground(urlPath) {
-  let body = document.querySelector("body");
-  body.style.backgroundImage = `url(${urlPath})`;
-}
+const trocaBackground = (urlPath) => {
+  body.style.backgroundImage = `url(${URL_PATH_IMAGE}${urlPath})`;
+};
 
-function mudaCapaFilme(urlPath) {
-  let capa = document.querySelector("#capa-filme");
-  capa.setAttribute("src", `${urlPath}`);
-}
+const trocaCapaFilme = (urlPath) => {
+  capa.setAttribute("src", `${URL_PATH_IMAGE}${urlPath}`);
+};
 
-function mudaDuracao(dataLancamento) {
-  let duracao = document.querySelector("#main__data-lancamento");
-  duracao.innerHTML = `${dataLancamento}`;
-}
+const troca = (propriedade, valorAtribuido) => {
+  propriedade.innerHTML = `${valorAtribuido}`;
+};
 
-function mudaTitulo(texto) {
-  let titulo = document.querySelector("#header__titulo");
-  titulo.innerHTML = `${texto}`;
-}
+const clickSetaDireita = () => {
+  setaDireita.addEventListener("click", (event) => {
+    const filmeExibido = arrayFilmes[variadorDeFilme];
 
-function mudaDescricao(texto) {
-  let descricao = document.querySelector(".main__descricao p");
-  descricao.innerHTML = `${texto}`;
-}
+    if (variadorDeFilme < arrayFilmes.length) {
+      console.log("vaariador de filme direito: ", variadorDeFilme);
+
+      trocaBackground(filmeExibido.backdrop_path);
+      trocaCapaFilme(filmeExibido.poster_path);
+      troca(titulo, filmeExibido.title);
+      troca(descricao, filmeExibido.overview);
+      troca(duracao, filmeExibido.release_date);
+      ++variadorDeFilme;
+    } else {
+      event.preventDefault();
+      alert("Não há mais filmes para ver aqui...");
+    }
+  });
+};
+
+const clickSetaEsquerda = () => {
+  setaEsquerda.addEventListener("click", (event) => {
+    const filmeExibido = arrayFilmes[variadorDeFilme];
+
+    if (variadorDeFilme == 0) {
+      event.preventDefault();
+      alert("Você está no primeiro filme da lista...");
+    } else {
+      console.log("vaariador de filme esquerdo: ", variadorDeFilme);
+
+      trocaBackground(filmeExibido.backdrop_path);
+      trocaCapaFilme(filmeExibido.poster_path);
+      troca(titulo, filmeExibido.title);
+      troca(descricao, filmeExibido.overview);
+      troca(duracao, filmeExibido.release_date);
+      variadorDeFilme--;
+    }
+  });
+};
 
 getFilmes();
+clickSetaDireita();
+clickSetaEsquerda();

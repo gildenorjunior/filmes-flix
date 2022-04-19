@@ -52,6 +52,18 @@ body {
   text-align: center;
 }
 
+.container-setas-carrossel {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 0 40px;
+}
+
+.container-setas-carrossel img {
+  width: 40px;
+  cursor: pointer;
+}
+
 .main {
   display: flex;
   justify-content: center;
