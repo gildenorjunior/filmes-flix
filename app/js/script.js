@@ -16,98 +16,105 @@ const capa = document.querySelector("#capa-filme");
 const duracao = document.querySelector("#main__data-lancamento");
 const titulo = document.querySelector("#header__titulo");
 const descricao = document.querySelector(".main__descricao p");
-const setaEsquerda = document.querySelector("#seta-carrossel-esquerda");
-const setaDireita = document.querySelector("#seta-carrossel-direita");
-const setaCarrossel = document.querySelectorAll(".seta-carrossel");
+const btnSetaEsquerda = document.querySelector("#seta-carrossel-esquerda");
+const btnSetaDireita = document.querySelector("#seta-carrossel-direita");
 
-let arrayFilmes;
-var variadorDeFilme = 0;
+var arrayFilmes = [];
+var filmeAtual = 0;
 
-const getFilmes = () => {
-  fetch(URL_API)
-    .then((response) => response.json())
-    .then((response) => {
-      arrayFilmes = response.results;
-    })
-    .catch((error) => console.log(error));
-};
+function onLoad() {
+  window.addEventListener("load", async function () {
+    await fetch(URL_API)
+      .then((response) => response.json())
+      .then((response) => {
+        arrayFilmes = response.results;
 
-const trocaBackground = (urlPath) => {
-  body.style.backgroundImage = `url(${URL_PATH_IMAGE}${urlPath})`;
-};
+        let filme = {
+          titulo: arrayFilmes[filmeAtual].title,
+          duracao: arrayFilmes[filmeAtual].release_date,
+          descricao: arrayFilmes[filmeAtual].overview,
+          capa: arrayFilmes[filmeAtual].poster_path,
+          background: arrayFilmes[filmeAtual].backdrop_path,
+        };
 
-const trocaCapaFilme = (urlPath) => {
-  capa.setAttribute("src", `${URL_PATH_IMAGE}${urlPath}`);
-};
-
-const troca = (propriedade, valorAtribuido) => {
-  propriedade.innerHTML = `${valorAtribuido}`;
-};
-
-const clickSetaDireita = () => {
-  setaDireita.addEventListener("click", (event) => {
-    const filmeExibido = arrayFilmes[variadorDeFilme];
-    if (variadorDeFilme < arrayFilmes.length) {
-      trocaBackground(filmeExibido.backdrop_path);
-      variadorDeFilme++;
-    } else {
-      event.preventDefault();
-      alert("Não há mais filmes para ver aqui...");
-    }
+        trocaTudo(
+          filme.titulo,
+          filme.duracao,
+          filme.descricao,
+          filme.capa,
+          filme.background
+        );
+      })
+      .catch((error) => console.log(error));
   });
-};
+}
 
-const clickSetaEsquerda = () => {
-  setaEsquerda.addEventListener("click", (event) => {
-    const filmeExibido = arrayFilmes[variadorDeFilme];
-    if (variadorDeFilme == 0) {
-      event.preventDefault();
-      alert("Você está no primeiro filme da lista...");
-    } else {
-      trocaBackground(filmeExibido.backdrop_path);
-      trocaCapaFilme(filmeExibido.poster_path);
-      troca(titulo, filmeExibido.title);
-      troca(descricao, filmeExibido.overview);
-      troca(duracao, filmeExibido.release_date);
-      variadorDeFilme--;
-    }
+function trocaCapaFilme(url) {
+  capa.setAttribute("src", `${URL_PATH_IMAGE}${url}`);
+}
+
+function trocaBackground(url) {
+  body.style.backgroundImage = `url(${URL_PATH_IMAGE}${url})`;
+}
+
+function troca(title, overview, release_date) {
+  titulo.innerHTML = `${title}`;
+  descricao.innerHTML = `${overview}`;
+  duracao.innerHTML = `${release_date}`;
+}
+
+function trocaTudo(titulo, duracao, descricao, capa, background) {
+  troca(titulo, descricao, duracao);
+  trocaBackground(background);
+  trocaCapaFilme(capa);
+}
+
+function clickSetaDireita() {
+  btnSetaDireita.addEventListener("click", (e) => {
+    filmeAtual++;
+    if (filmeAtual == arrayFilmes.length - 1) filmeAtual = 0;
+
+    let filme = {
+      titulo: arrayFilmes[filmeAtual].title,
+      duracao: arrayFilmes[filmeAtual].release_date,
+      descricao: arrayFilmes[filmeAtual].overview,
+      capa: arrayFilmes[filmeAtual].poster_path,
+      background: arrayFilmes[filmeAtual].backdrop_path,
+    };
+
+    trocaTudo(
+      filme.titulo,
+      filme.duracao,
+      filme.descricao,
+      filme.capa,
+      filme.background
+    );
   });
-};
+}
 
-const clickSeta = () => {
-  // setaCarrossel.forEach((seta) => {
-  //   seta.addEventListener("click", (event) => {
-  //     const filmeExibido = arrayFilmes[variadorDeFilme];
-  //     if (event.target.id == "seta-carrossel-direita") {
-  //       if (variadorDeFilme < arrayFilmes.length) {
-  //         trocaBackground(filmeExibido.backdrop_path);
-  //         trocaCapaFilme(filmeExibido.poster_path);
-  //         troca(titulo, filmeExibido.title);
-  //         troca(descricao, filmeExibido.overview);
-  //         troca(duracao, filmeExibido.release_date);
-  //         variadorDeFilme++;
-  //       } else {
-  //         event.preventDefault();
-  //         alert("Não há mais filmes para ver aqui...");
-  //       }
-  //     } else if (event.target.id == "seta-carrossel-esquerda") {
-  //       if (variadorDeFilme == 0) {
-  //         event.preventDefault();
-  //         alert("Você está no primeiro filme da lista...");
-  //       } else {
-  //         trocaBackground(filmeExibido.backdrop_path);
-  //         trocaCapaFilme(filmeExibido.poster_path);
-  //         troca(titulo, filmeExibido.title);
-  //         troca(descricao, filmeExibido.overview);
-  //         troca(duracao, filmeExibido.release_date);
-  //         variadorDeFilme--;
-  //       }
-  //     }
-  //   });
-  // });
-};
+function clickSetaEsquerda() {
+  btnSetaEsquerda.addEventListener("click", (e) => {
+    filmeAtual--;
+    if (filmeAtual < 0) filmeAtual = arrayFilmes.length - 1;
 
-getFilmes();
+    let filme = {
+      titulo: arrayFilmes[filmeAtual].title,
+      duracao: arrayFilmes[filmeAtual].release_date,
+      descricao: arrayFilmes[filmeAtual].overview,
+      capa: arrayFilmes[filmeAtual].poster_path,
+      background: arrayFilmes[filmeAtual].backdrop_path,
+    };
+
+    trocaTudo(
+      filme.titulo,
+      filme.duracao,
+      filme.descricao,
+      filme.capa,
+      filme.background
+    );
+  });
+}
+
+onLoad();
 clickSetaDireita();
 clickSetaEsquerda();
-// clickSeta();
