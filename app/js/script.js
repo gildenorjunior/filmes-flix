@@ -18,15 +18,16 @@ const titulo = document.querySelector("#header__titulo");
 const descricao = document.querySelector(".main__descricao p");
 const setaEsquerda = document.querySelector("#seta-carrossel-esquerda");
 const setaDireita = document.querySelector("#seta-carrossel-direita");
+const setaCarrossel = document.querySelectorAll(".seta-carrossel");
 
 let arrayFilmes;
 var variadorDeFilme = 0;
 
 const getFilmes = () => {
-  axios
-    .get(URL_API)
+  fetch(URL_API)
+    .then((response) => response.json())
     .then((response) => {
-      arrayFilmes = response.data.results;
+      arrayFilmes = response.results;
     })
     .catch((error) => console.log(error));
 };
@@ -46,16 +47,9 @@ const troca = (propriedade, valorAtribuido) => {
 const clickSetaDireita = () => {
   setaDireita.addEventListener("click", (event) => {
     const filmeExibido = arrayFilmes[variadorDeFilme];
-
     if (variadorDeFilme < arrayFilmes.length) {
-      console.log("vaariador de filme direito: ", variadorDeFilme);
-
       trocaBackground(filmeExibido.backdrop_path);
-      trocaCapaFilme(filmeExibido.poster_path);
-      troca(titulo, filmeExibido.title);
-      troca(descricao, filmeExibido.overview);
-      troca(duracao, filmeExibido.release_date);
-      ++variadorDeFilme;
+      variadorDeFilme++;
     } else {
       event.preventDefault();
       alert("Não há mais filmes para ver aqui...");
@@ -66,13 +60,10 @@ const clickSetaDireita = () => {
 const clickSetaEsquerda = () => {
   setaEsquerda.addEventListener("click", (event) => {
     const filmeExibido = arrayFilmes[variadorDeFilme];
-
     if (variadorDeFilme == 0) {
       event.preventDefault();
       alert("Você está no primeiro filme da lista...");
     } else {
-      console.log("vaariador de filme esquerdo: ", variadorDeFilme);
-
       trocaBackground(filmeExibido.backdrop_path);
       trocaCapaFilme(filmeExibido.poster_path);
       troca(titulo, filmeExibido.title);
@@ -83,6 +74,40 @@ const clickSetaEsquerda = () => {
   });
 };
 
+const clickSeta = () => {
+  // setaCarrossel.forEach((seta) => {
+  //   seta.addEventListener("click", (event) => {
+  //     const filmeExibido = arrayFilmes[variadorDeFilme];
+  //     if (event.target.id == "seta-carrossel-direita") {
+  //       if (variadorDeFilme < arrayFilmes.length) {
+  //         trocaBackground(filmeExibido.backdrop_path);
+  //         trocaCapaFilme(filmeExibido.poster_path);
+  //         troca(titulo, filmeExibido.title);
+  //         troca(descricao, filmeExibido.overview);
+  //         troca(duracao, filmeExibido.release_date);
+  //         variadorDeFilme++;
+  //       } else {
+  //         event.preventDefault();
+  //         alert("Não há mais filmes para ver aqui...");
+  //       }
+  //     } else if (event.target.id == "seta-carrossel-esquerda") {
+  //       if (variadorDeFilme == 0) {
+  //         event.preventDefault();
+  //         alert("Você está no primeiro filme da lista...");
+  //       } else {
+  //         trocaBackground(filmeExibido.backdrop_path);
+  //         trocaCapaFilme(filmeExibido.poster_path);
+  //         troca(titulo, filmeExibido.title);
+  //         troca(descricao, filmeExibido.overview);
+  //         troca(duracao, filmeExibido.release_date);
+  //         variadorDeFilme--;
+  //       }
+  //     }
+  //   });
+  // });
+};
+
 getFilmes();
 clickSetaDireita();
 clickSetaEsquerda();
+// clickSeta();
