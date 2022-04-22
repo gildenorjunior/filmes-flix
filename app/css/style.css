@@ -97,6 +97,10 @@ body {
   width: 750px;
 }
 
+.estrela-avaliacao {
+  color: yellow;
+}
+
 #main__duracao {
   display: flex;
   align-items: center;
