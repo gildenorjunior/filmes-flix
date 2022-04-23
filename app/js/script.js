@@ -1,10 +1,7 @@
 // TODO: ARQUIVO DE CONFIGURAÇÕES, ESTRUTURAR MELHOR COM PARAMETROS DA URL
-//      ADICIONAR SLIDE CARROSSEL NA PÁGINA
-//      PEGAR OS DADOS DE FORMA DINÂMICA NO JS
 //      REFATORAR CÓDIGO JS
 //      BOTÕES DO CARROSSEL DEVEM FICAR PARADOS AO TROCAR DE FILMES
 //      AO MUDAR DE FILMES E A DESCRIÇÃO DO MESMO FOR GRANDE DEVE TER UM ESPAÇAMENTO ENTRE ELA E OS BOTÕES DE ASSISTIR AGORA E TRAILER
-//      LÓGICA PARA VOTOS DE POPULARIDADE DO FILME ALTERNANDO ESTRELAS NA TELA
 
 import * as key from "../config/key.js";
 
@@ -44,147 +41,64 @@ function onLoad() {
           filme.duracao,
           filme.descricao,
           filme.capa,
-          filme.background
+          filme.background,
+          filme.avaliacao
         );
-
-        avaliacao(filme.avaliacao);
       })
       .catch((error) => console.log(error));
   });
 }
 
-function avaliacao(avaliacao) {
-  if (avaliacao <= 1) {
-    const estrelaCriada = document.createElement("i");
-    estrelaCriada.classList = "fa-regular fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada);
-  } else if (avaliacao > 1 && avaliacao <= 2) {
-    const estrelaCriada = document.createElement("i");
-    estrelaCriada.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada);
+// Atribui ao HTML a quantidade de estrelas com preenchimento
+// e sem preenchimento de acordo com os paramêtros
+function esquemaDeEstrelas(
+  qtdEstrelasComPreenchimento,
+  qtdEstrelasSemPreenchimento
+) {
+  const qtdEstrelas = qtdEstrelasSemPreenchimento + qtdEstrelasComPreenchimento;
 
+  if (iconeEstrela.hasChildNodes()) {
+    Array.from(iconeEstrela.children).forEach((item) => {
+      item.remove();
+    });
+  }
+
+  for (let i = 0; i < qtdEstrelas; i++) {
+    let elementoCriado = document.createElement("i");
+    iconeEstrela.appendChild(elementoCriado);
+  }
+
+  Array.from(iconeEstrela.children).forEach((item) => {
+    qtdEstrelasSemPreenchimento--;
+    qtdEstrelasComPreenchimento--;
+
+    if (qtdEstrelasComPreenchimento >= 0) {
+      item.classList = "fa-solid fa-star fa-2xl";
+    }
+
+    if (item.classList == "") {
+      item.classList = "fa-regular fa-star fa-2xl";
+    }
+  });
+}
+
+function avaliacaoDoFilme(notaDoFilme) {
+  if (notaDoFilme <= 1) {
+    esquemaDeEstrelas(4, 1);
+  } else if (notaDoFilme > 1 && notaDoFilme <= 3) {
+    esquemaDeEstrelas(1, 4);
     console.log("uma estrela completa");
-  } else if (avaliacao > 2 && avaliacao <= 3) {
-    const estrelaCriada = document.createElement("i");
-    estrelaCriada.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada);
-
-    const estrelaCriada1 = document.createElement("i");
-    estrelaCriada1.classList = "fa-regular fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada1);
-
-    console.log("uma estrela e meia");
-  } else if (avaliacao > 3 && avaliacao <= 4) {
-    const estrelaCriada = document.createElement("i");
-    estrelaCriada.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada);
-
-    const estrelaCriada1 = document.createElement("i");
-    estrelaCriada1.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada1);
-
+  } else if (notaDoFilme > 3 && notaDoFilme <= 5) {
+    esquemaDeEstrelas(2, 3);
     console.log("duas estrelas");
-  } else if (avaliacao > 4 && avaliacao <= 5) {
-    const estrelaCriada = document.createElement("i");
-    estrelaCriada.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada);
-
-    const estrelaCriada1 = document.createElement("i");
-    estrelaCriada1.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada1);
-
-    const estrelaCriada2 = document.createElement("i");
-    estrelaCriada2.classList = "fa-regular fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada2);
-    console.log("duas estrelas e meia");
-  } else if (avaliacao > 5 && avaliacao <= 6) {
-    const estrelaCriada = document.createElement("i");
-    estrelaCriada.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada);
-
-    const estrelaCriada1 = document.createElement("i");
-    estrelaCriada1.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada1);
-
-    const estrelaCriada2 = document.createElement("i");
-    estrelaCriada2.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada2);
+  } else if (notaDoFilme > 5 && notaDoFilme <= 7) {
+    esquemaDeEstrelas(3, 2);
     console.log("tres estrelas");
-  } else if (avaliacao > 6 && avaliacao <= 7) {
-    const estrelaCriada = document.createElement("i");
-    estrelaCriada.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada);
-
-    const estrelaCriada1 = document.createElement("i");
-    estrelaCriada1.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada1);
-
-    const estrelaCriada2 = document.createElement("i");
-    estrelaCriada2.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada2);
-
-    const estrelaCriada3 = document.createElement("i");
-    estrelaCriada3.classList = "fa-regular fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada3);
-    console.log("tres estrelas e meia");
-  } else if (avaliacao > 7 && avaliacao <= 8) {
-    const estrelaCriada = document.createElement("i");
-    estrelaCriada.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada);
-
-    const estrelaCriada1 = document.createElement("i");
-    estrelaCriada1.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada1);
-
-    const estrelaCriada2 = document.createElement("i");
-    estrelaCriada2.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada2);
-
-    const estrelaCriada3 = document.createElement("i");
-    estrelaCriada3.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada3);
+  } else if (notaDoFilme > 7 && notaDoFilme <= 9) {
+    esquemaDeEstrelas(4, 1);
     console.log("quatro estrelas");
-  } else if (avaliacao > 8 && avaliacao <= 9) {
-    const estrelaCriada = document.createElement("i");
-    estrelaCriada.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada);
-
-    const estrelaCriada1 = document.createElement("i");
-    estrelaCriada1.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada1);
-
-    const estrelaCriada2 = document.createElement("i");
-    estrelaCriada2.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada2);
-
-    const estrelaCriada3 = document.createElement("i");
-    estrelaCriada3.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada3);
-
-    const estrelaCriada4 = document.createElement("i");
-    estrelaCriada4.classList = "fa-regular fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada4);
-    console.log("quatro estrelas e meia");
-  } else if (avaliacao > 9 && avaliacao <= 10) {
-    const estrelaCriada = document.createElement("i");
-    estrelaCriada.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada);
-
-    const estrelaCriada1 = document.createElement("i");
-    estrelaCriada1.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada1);
-
-    const estrelaCriada2 = document.createElement("i");
-    estrelaCriada2.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada2);
-
-    const estrelaCriada3 = document.createElement("i");
-    estrelaCriada3.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada3);
-
-    const estrelaCriada4 = document.createElement("i");
-    estrelaCriada4.classList = "fa-solid fa-star fa-2xl";
-    iconeEstrela.appendChild(estrelaCriada4);
+  } else if (notaDoFilme > 9 && notaDoFilme <= 10) {
+    esquemaDeEstrelas(5, 0);
     console.log("cinco estrelas");
   }
 }
@@ -203,10 +117,11 @@ function troca(title, overview, release_date) {
   duracao.innerHTML = `${release_date}`;
 }
 
-function trocaTudo(titulo, duracao, descricao, capa, background) {
+function trocaTudo(titulo, duracao, descricao, capa, background, avaliacao) {
   troca(titulo, descricao, duracao);
   trocaBackground(background);
   trocaCapaFilme(capa);
+  avaliacaoDoFilme(avaliacao);
 }
 
 function clickSetaDireita() {
@@ -228,10 +143,9 @@ function clickSetaDireita() {
       filme.duracao,
       filme.descricao,
       filme.capa,
-      filme.background
+      filme.background,
+      filme.avaliacao
     );
-
-    avaliacao(filme.avaliacao);
   });
 }
 
@@ -254,10 +168,9 @@ function clickSetaEsquerda() {
       filme.duracao,
       filme.descricao,
       filme.capa,
-      filme.background
+      filme.background,
+      filme.avaliacao
     );
-
-    avaliacao(filme.avaliacao);
   });
 }
 
