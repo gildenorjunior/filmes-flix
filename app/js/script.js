@@ -1,8 +1,3 @@
-// TODO: ARQUIVO DE CONFIGURAÇÕES, ESTRUTURAR MELHOR COM PARAMETROS DA URL
-//      REFATORAR CÓDIGO JS
-//      BOTÕES DO CARROSSEL DEVEM FICAR PARADOS AO TROCAR DE FILMES
-//      AO MUDAR DE FILMES E A DESCRIÇÃO DO MESMO FOR GRANDE DEVE TER UM ESPAÇAMENTO ENTRE ELA E OS BOTÕES DE ASSISTIR AGORA E TRAILER
-
 import * as key from "../config/key.js";
 
 const URL_API = `https://api.themoviedb.org/3/movie/popular?api_key=${key.API_KEY}&page=1&language=pt-BR`;
@@ -11,7 +6,7 @@ const URL_PATH_IMAGE = "https://image.tmdb.org/t/p/original/";
 const body = document.querySelector("body");
 const capa = document.querySelector("#capa-filme");
 const duracao = document.querySelector("#main__data-lancamento");
-const titulo = document.querySelector("#header__titulo");
+const titulo = document.querySelector(".header__title");
 const descricao = document.querySelector(".main__descricao p");
 const btnSetaEsquerda = document.querySelector("#seta-carrossel-esquerda");
 const btnSetaDireita = document.querySelector("#seta-carrossel-direita");

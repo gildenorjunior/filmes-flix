@@ -1,0 +1,16 @@
+@use "../globals/colors" as c;
+@use "../util/functions" as f;
+
+.header {
+  text-align: center;
+  color: c.$white;
+}
+
+.header__title {
+  font-size: f.rem(96);
+  margin-bottom: 0;
+}
+
+.header__subtitle {
+  font-size: f.rem(20);
+}

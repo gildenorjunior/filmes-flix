@@ -1,0 +1,22 @@
+@use "../globals/colors" as c;
+@use "../util/functions" as *;
+
+.botoes button {
+  padding: rem(15) rem(27);
+  margin-right: rem(20);
+  font-size: rem(16);
+  font-weight: 700;
+  color: c.$white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#btn__assistir-agora {
+  background-color: c.$blue;
+  border: none;
+}
+
+#btn__trailer {
+  background-color: c.$black;
+  border: 1px solid c.$white;
+}
